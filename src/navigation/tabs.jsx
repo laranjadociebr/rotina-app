@@ -2,8 +2,8 @@ import React from "react";
 import { Text, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import Rotina from "../pages/Rotina";
-import Grafico from "../pages/Grafico";
+import Rotina from "../screens/Rotina";
+import Grafico from "../screens/Grafico";
 
 import { Entypo, Feather, Octicons } from '@expo/vector-icons';
 
@@ -11,7 +11,7 @@ import { Entypo, Feather, Octicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
 
 // Componente de rotas (navegação)
-export default function Routes() {
+export default function Tabs() {
     return (
 
         <Tab.Navigator

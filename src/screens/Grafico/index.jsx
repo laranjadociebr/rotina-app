@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, StatusBar } from "react-native";
-import { RotinaButtonCriar } from '../../Components/buttons/RotinaButtonCriar';
+import { RotinaButtonCriar } from '../../Components/buttons/RotinaButton';
 
 export default function Grafico() {
     return (

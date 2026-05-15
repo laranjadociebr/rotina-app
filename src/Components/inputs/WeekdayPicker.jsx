@@ -11,18 +11,21 @@ const days = [
   { label: "Domingo", value: "domingo" },
 ];
 
-export default function WeekdayPicker({ value, onChange, label = "Dia da semana" }) {
-  const [selectedDay, setSelectedDay] = useState(value ?? "");
+export default function WeekdayPicker({ value, onChange, label = "Dia da semana:" }) {
+  const [selectedDays, setSelectedDays] = useState(value ?? []);
 
   useEffect(() => {
-    if (value !== undefined && value !== selectedDay) {
-      setSelectedDay(value);
+    if (value !== undefined && JSON.stringify(value) !== JSON.stringify(selectedDays)) {
+      setSelectedDays(value);
     }
   }, [value]);
 
   const handleSelect = (dayValue) => {
-    setSelectedDay(dayValue);
-    if (onChange) onChange(dayValue);
+    const newSelected = selectedDays.includes(dayValue)
+      ? selectedDays.filter(day => day !== dayValue)
+      : [...selectedDays, dayValue];
+    setSelectedDays(newSelected);
+    if (onChange) onChange(newSelected);
   };
 
   return (
@@ -32,10 +35,10 @@ export default function WeekdayPicker({ value, onChange, label = "Dia da semana"
         {days.map((day) => (
           <TouchableOpacity
             key={day.value}
-            style={[styles.dayButton, selectedDay === day.value && styles.dayButtonSelected]}
+            style={[styles.dayButton, selectedDays.includes(day.value) && styles.dayButtonSelected]}
             onPress={() => handleSelect(day.value)}
           >
-            <Text style={[styles.dayText, selectedDay === day.value && styles.dayTextSelected]}>{day.label}</Text>
+            <Text style={[styles.dayText, selectedDays.includes(day.value) && styles.dayTextSelected]}>{day.label}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: 8,
     fontSize: 14,
-    color: "#333",
+    color: "#ffffff",
   },
   scroll: {
     alignItems: "center",

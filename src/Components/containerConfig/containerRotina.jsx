@@ -5,12 +5,16 @@ import NomeTarefa from "../../Components/inputs/NomeTarefa";
 import TimePicker from "../inputs/TimePicker";
 import WeekdayPicker from "../inputs/WeekdayPicker";
 import PickerDuracao from "../inputs/PickerDuracao";
+import { SalvarButton } from "../buttons/SalvarButton";
+import { Picker } from "react-native-web";
+import LocalizacaoTarefa from "../inputs/LocalizacaoTarefa";
 
 export default function InserirDadosRotina() {
     const [tarefaSelecionada, setTarefaSelecionada] = useState("");
     const [nomeTarefa, setNomeTarefa] = useState("");
     const [horario, setHorario] = useState(null);
     const [diaSemana, setDiaSemana] = useState("");
+    const [duracao, setDuracao] = useState("");
 
     return (
         <View contentContainerStyle={styles.container}>
@@ -35,6 +39,13 @@ export default function InserirDadosRotina() {
                 onChange={setDiaSemana}
             />
 
+            <PickerDuracao
+                value={duracao}
+                onChange={setDuracao}
+            />
+            
+            <SalvarButton/>
+
             
 
         </View>
@@ -48,6 +59,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         marginBottom: 12,
+        color: "#ffffff",
     },
     infoBox: {
         marginTop: 20,

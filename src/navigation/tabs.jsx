@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { LinearGradient } from 'expo-linear-gradient';
 
 import Rotina from "../screens/Rotina";
 import Grafico from "../screens/Grafico";
@@ -13,7 +14,7 @@ const Tab = createBottomTabNavigator();
 // Componente de rotas (navegação)
 export default function Tabs() {
     return (
-
+        
         <Tab.Navigator
             screenOptions={{
                 tabBarActiveTintColor: '#13456d',

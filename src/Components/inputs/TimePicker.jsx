@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-export default function TimePicker({ value, onChange, label = "Horário", placeholder = "Selecione a hora" }) {
+export default function TimePicker({ value, onChange, label = "Horário:", placeholder = "Selecione a hora" }) {
   const [show, setShow] = useState(false);
   const [selectedTime, setSelectedTime] = useState(value ?? null);
 
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: 6,
     fontSize: 14,
-    color: "#333",
+    color: "#ffffff",
   },
   button: {
     height: 44,

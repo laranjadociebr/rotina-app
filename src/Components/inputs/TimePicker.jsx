@@ -4,23 +4,37 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function TimePicker({ value, onChange, label = "Horário:", placeholder = "Selecione a hora" }) {
   const [show, setShow] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(value ?? null);
+  const [pickerType, setPickerType] = useState(null); // "start" ou "end"
+  const [startTime, setStartTime] = useState(value?.startTime ?? null);
+  const [endTime, setEndTime] = useState(value?.endTime ?? null);
 
   useEffect(() => {
     if (value) {
-      setSelectedTime(value);
+      setStartTime(value.startTime ?? null);
+      setEndTime(value.endTime ?? null);
     }
   }, [value]);
 
-  const handlePress = () => {
+  const handlePressStart = () => {
+    setPickerType("start");
+    setShow(true);
+  };
+
+  const handlePressEnd = () => {
+    setPickerType("end");
     setShow(true);
   };
 
   const handleChange = (event, date) => {
     setShow(Platform.OS === "ios");
     if (date) {
-      setSelectedTime(date);
-      if (onChange) onChange(date);
+      if (pickerType === "start") {
+        setStartTime(date);
+        if (onChange) onChange({ startTime: date, endTime });
+      } else if (pickerType === "end") {
+        setEndTime(date);
+        if (onChange) onChange({ startTime, endTime: date });
+      }
     }
   };
 
@@ -33,14 +47,27 @@ export default function TimePicker({ value, onChange, label = "Horário:", place
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <TouchableOpacity onPress={handlePress} style={styles.button}>
-        <Text style={styles.buttonText}>
-          {selectedTime ? formatTime(selectedTime) : placeholder}
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.timeInputsContainer}>
+        <View style={styles.timeInputWrapper}>
+          <Text style={styles.timeLabel}>Inicial</Text>
+          <TouchableOpacity onPress={handlePressStart} style={styles.button}>
+            <Text style={styles.buttonText}>
+              {startTime ? formatTime(startTime) : placeholder}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.timeInputWrapper}>
+          <Text style={styles.timeLabel}>Final</Text>
+          <TouchableOpacity onPress={handlePressEnd} style={styles.button}>
+            <Text style={styles.buttonText}>
+              {endTime ? formatTime(endTime) : placeholder}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
       {show && (
         <DateTimePicker
-          value={selectedTime ?? new Date()}
+          value={pickerType === "start" ? (startTime ?? new Date()) : (endTime ?? new Date())}
           mode="time"
           display={Platform.OS === "ios" ? "spinner" : "default"}
           onChange={handleChange}
@@ -55,9 +82,21 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    marginBottom: 6,
+    marginBottom: 12,
     fontSize: 14,
     color: "#ffffff",
+  },
+  timeInputsContainer: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  timeInputWrapper: {
+    flex: 1,
+  },
+  timeLabel: {
+    marginBottom: 6,
+    fontSize: 12,
+    color: "#cccccc",
   },
   button: {
     height: 44,

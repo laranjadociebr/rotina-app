@@ -13,7 +13,6 @@ export default function Rotina({ navigation }) {
          start={[0, 0]}
           end={[0, 1]}
          style={styles.container}>
-          <Text>Teste Página Rotina</Text>
           <RotinaButtonCriar onPress={() => navigation.navigate('ConfigurarRotina')} />
           <RotinaButtonCriar />
           <RotinaButtonCriar />

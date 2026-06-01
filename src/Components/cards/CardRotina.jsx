@@ -9,10 +9,11 @@ import { EditarButtonCriar } from "../buttons/EditarButton";
 export const AdicionarCard = ({
     nomeTarefa,
     tarefaSelecionada,
-    horario,
+    horarioInicio,
+    horarioFim,
     diaSemana,
-    duracao
-    , onEdit
+    duracao,
+    onEdit,
 }) => {
 
     const formatTime = (date) => {
@@ -42,33 +43,26 @@ export const AdicionarCard = ({
         }
     };
 
-    const formatHorario = (h) => {
+    const formatHorario = (start, end) => {
+        const formatValue = (value) => {
+            if (!value) return "";
+            if (typeof value === "string") return value;
+            if (value instanceof Date) return formatTime(value);
+            try {
+                return String(value);
+            } catch (e) {
+                return "";
+            }
+        };
 
-        if (!h) return "";
+        const formattedStart = formatValue(start);
+        const formattedEnd = formatValue(end);
 
-        if (typeof h === "string")
-            return h;
-
-        if (h.startTime && h.endTime) {
-
-            const start =
-                formatTime(h.startTime);
-
-            const end =
-                formatTime(h.endTime);
-
-            return `${start} - ${end}`;
+        if (formattedStart && formattedEnd) {
+            return `${formattedStart} - ${formattedEnd}`;
         }
 
-        if (h instanceof Date) {
-            return formatTime(h);
-        }
-
-        try {
-            return String(h);
-        } catch (e) {
-            return "";
-        }
+        return formattedStart || formattedEnd;
     };
 
     const formatDias = (d) => {
@@ -152,7 +146,7 @@ export const AdicionarCard = ({
 
                 <Text style={styles.horario}>
                     {capitalize(
-                        formatHorario(horario)
+                        formatHorario(horarioInicio, horarioFim)
                     )}
                 </Text>
 

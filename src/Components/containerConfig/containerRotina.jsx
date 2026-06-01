@@ -10,23 +10,27 @@ import { SalvarButton } from "../buttons/SalvarButton";
 import { Picker } from "react-native-web";
 import LocalizacaoTarefa from "../inputs/LocalizacaoTarefa";
 import ModalErro from "../../Components/buttons/AlertaErro";
+import { formatTime } from "../../utils/formatTime";
 
 export default function InserirDadosRotina({ adicionarTarefa, initialData = null, editIndex = null, onSaveEdit = null }) {
     const navigation = useNavigation();
 
     const [tarefaSelecionada, setTarefaSelecionada] = useState("");
     const [nomeTarefa, setNomeTarefa] = useState("");
-    const [horario, setHorario] = useState(null);
+    const [horario, setHorario] = useState({
+        startTime: null,
+        endTime: null,
+    });
     const [diaSemana, setDiaSemana] = useState("");
     const [duracao, setDuracao] = useState("");
 
     const [mostrarErro, setMostrarErro] = useState(false);
-
     function salvarDadosRotina() {
         const novaTarefa = {
             nomeTarefa,
             tarefaSelecionada,
-            horario,
+            horarioInicio: formatTime(horario.startTime),
+            horarioFim: formatTime(horario.endTime),
             diaSemana,
             duracao,
         };
@@ -34,7 +38,8 @@ export default function InserirDadosRotina({ adicionarTarefa, initialData = null
         if (
             !nomeTarefa.trim() ||
             !tarefaSelecionada ||
-            !horario ||
+            !horario.startTime ||
+            !horario.endTime ||
             !diaSemana ||
             !duracao
         ) {
@@ -43,10 +48,13 @@ export default function InserirDadosRotina({ adicionarTarefa, initialData = null
         }
 
         if (onSaveEdit) {
+            console.log("Editando tarefa localmente");
             onSaveEdit(novaTarefa);
         } else {
+            console.log("Adicionando nova tarefa localmente");
             adicionarTarefa?.(novaTarefa);
         }
+
         navigation.goBack();
     }
 
@@ -54,7 +62,22 @@ export default function InserirDadosRotina({ adicionarTarefa, initialData = null
         if (initialData) {
             setNomeTarefa(initialData.nomeTarefa ?? "");
             setTarefaSelecionada(initialData.tarefaSelecionada ?? "");
-            setHorario(initialData.horario ?? null);
+            setHorario({
+
+                startTime:
+                    initialData.horarioInicio
+                        ? new Date(
+                            `1970-01-01T${initialData.horarioInicio}`
+                        )
+                        : null,
+
+                endTime:
+                    initialData.horarioFim
+                        ? new Date(
+                            `1970-01-01T${initialData.horarioFim}`
+                        )
+                        : null,
+            });
             setDiaSemana(initialData.diaSemana ?? "");
             setDuracao(initialData.duracao ?? "");
         }

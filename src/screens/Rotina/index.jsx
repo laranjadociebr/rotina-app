@@ -2,8 +2,24 @@ import React from "react";
 import { View, Text, StyleSheet, StatusBar } from "react-native";
 import { RotinaButtonCriar } from '../../Components/buttons/RotinaButton';
 import { LinearGradient } from 'expo-linear-gradient';
+import api from "../../services/api";
 
 export default function Rotina({ navigation }) {
+
+  async function buscarRotinas() {
+
+  try {
+
+    const response = await api.get("/Rotinas");
+
+    setRotinas(response.data);
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+}
   return (
        <LinearGradient colors={[
          '#18354e',

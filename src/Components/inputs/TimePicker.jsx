@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { formatTimeShort } from "../../utils/formatTime";
 
-export default function TimePicker({ value, onChange, label = "Horário:", placeholder = "Selecione a hora" }) {
+export default function TimePicker({ value, onChange, label = "Horário:", placeholder = "Selecione o horário" }) {
   const [show, setShow] = useState(false);
   const [pickerType, setPickerType] = useState(null); // "start" ou "end"
   const [startTime, setStartTime] = useState(value?.startTime ?? null);
@@ -38,11 +39,7 @@ export default function TimePicker({ value, onChange, label = "Horário:", place
     }
   };
 
-  const formatTime = (date) => {
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    return `${hours}:${minutes}`;
-  };
+  
 
   return (
     <View style={styles.container}>
@@ -52,7 +49,7 @@ export default function TimePicker({ value, onChange, label = "Horário:", place
           <Text style={styles.timeLabel}>Inicial</Text>
           <TouchableOpacity onPress={handlePressStart} style={styles.button}>
             <Text style={styles.buttonText}>
-              {startTime ? formatTime(startTime) : placeholder}
+              {startTime ? formatTimeShort(startTime) : placeholder}
             </Text>
           </TouchableOpacity>
         </View>
@@ -60,7 +57,7 @@ export default function TimePicker({ value, onChange, label = "Horário:", place
           <Text style={styles.timeLabel}>Final</Text>
           <TouchableOpacity onPress={handlePressEnd} style={styles.button}>
             <Text style={styles.buttonText}>
-              {endTime ? formatTime(endTime) : placeholder}
+              {endTime ? formatTimeShort(endTime) : placeholder}
             </Text>
           </TouchableOpacity>
         </View>

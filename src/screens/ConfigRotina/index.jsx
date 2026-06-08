@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -15,7 +15,7 @@ export default function ConfigurarRotina() {
     const navigation = useNavigation();
     const route = useRoute();
     const rotinaId = route?.params?.rotinaId ?? null;
-    const nomeRotina = route?.params?.nomeRotina ?? "Rotina";
+    const [nomeRotina, setNomeRotina] = useState(route?.params?.nomeRotina ?? (route?.params?.initialData?.nomeRotina ?? "Rotina"));
 
     const [tarefas, setTarefas] = useState([]);
 
@@ -28,6 +28,32 @@ export default function ConfigurarRotina() {
             novaTarefa
         ]);
     }
+
+    useEffect(() => {
+        // If the parent passed the full rotina object as initialData, use it instead of fetching.
+        const initialData = route?.params?.initialData;
+        if (initialData) {
+            setNomeRotina(initialData.nomeRotina ?? nomeRotina);
+            setTarefas(Array.isArray(initialData.tarefas) ? initialData.tarefas : []);
+            return;
+        }
+
+        async function carregarRotina() {
+            if (!rotinaId) return;
+            try {
+                const resp = await api.get(`/Rotinas/${rotinaId}`);
+                const data = resp.data;
+                if (data) {
+                    setNomeRotina(data.nomeRotina ?? nomeRotina);
+                    setTarefas(Array.isArray(data.tarefas) ? data.tarefas : []);
+                }
+            } catch (error) {
+                console.log('Erro ao carregar rotina para edição:', error.response?.data || error);
+            }
+        }
+
+        carregarRotina();
+    }, [rotinaId]);
 
     async function salvarRotina() {
         console.log("BOTÃO CLICADO");
@@ -52,7 +78,8 @@ export default function ConfigurarRotina() {
 
             console.log(response.data);
             alert("Rotina salva!");
-            navigation.navigate("Tabs", { screen: "Rotina" });
+
+            navigation.goBack();
         } catch (error) {
             console.log(error.response?.data || error);
         }
@@ -78,6 +105,19 @@ export default function ConfigurarRotina() {
         }
     }
 
+    useEffect(() => {
+        if (route.params?.initialData) {
+            const updatedInitialData = {
+                ...(route.params.initialData ?? {}),
+                tarefas,
+            };
+            navigation.setParams({
+                ...route.params,
+                initialData: updatedInitialData,
+            });
+        }
+    }, [tarefas]);
+
     console.log("Tarefas atuais:", tarefas);
 
     return (
@@ -92,6 +132,7 @@ export default function ConfigurarRotina() {
                 <FlatList
 
                     data={tarefas}
+                    extraData={tarefas}
 
                     keyExtractor={(item, index) =>
                         index.toString()
@@ -114,13 +155,23 @@ export default function ConfigurarRotina() {
                                     adicionarTarefa,
                                     initialData: item,
                                     editIndex: index,
-
                                     onSaveEdit: async (updated) => {
                                         const newTarefas = tarefas.map((t, i) =>
                                             i === index ? updated : t
                                         );
 
                                         setTarefas(newTarefas);
+
+                                        if (route.params?.initialData) {
+                                            navigation.setParams({
+                                                ...route.params,
+                                                initialData: {
+                                                    ...route.params.initialData,
+                                                    tarefas: newTarefas,
+                                                },
+                                            });
+                                        }
+
                                         await atualizarRotinaServer(newTarefas);
                                     }
                                 }

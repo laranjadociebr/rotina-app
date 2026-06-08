@@ -12,7 +12,7 @@ export default function Grafico() {
                  start={[0, 0]}
                   end={[0, 1]}
                  style={styles.container}>
-            <Text>Teste Página Gráfico</Text>
+            <Text style={styles.texto}>Nenhum histórico registrado</Text>
             
             <StatusBar style="auto" />
         </LinearGradient>
@@ -24,5 +24,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    
+  },
+  texto: {
+    fontSize: 18,
+    color: '#ffffff',
   },
 });

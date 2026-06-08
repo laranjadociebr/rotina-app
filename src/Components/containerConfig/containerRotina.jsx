@@ -25,7 +25,7 @@ export default function InserirDadosRotina({ adicionarTarefa, initialData = null
     const [duracao, setDuracao] = useState("");
 
     const [mostrarErro, setMostrarErro] = useState(false);
-    function salvarDadosRotina() {
+    async function salvarDadosRotina() {
         const novaTarefa = {
             nomeTarefa,
             tarefaSelecionada,
@@ -49,7 +49,7 @@ export default function InserirDadosRotina({ adicionarTarefa, initialData = null
 
         if (onSaveEdit) {
             console.log("Editando tarefa localmente");
-            onSaveEdit(novaTarefa);
+            await onSaveEdit(novaTarefa);
         } else {
             console.log("Adicionando nova tarefa localmente");
             adicionarTarefa?.(novaTarefa);

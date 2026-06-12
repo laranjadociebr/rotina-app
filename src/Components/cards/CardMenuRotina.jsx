@@ -4,39 +4,42 @@ import { EditarButtonCriar } from '../buttons/EditarButton';
 import { LinearGradient } from 'expo-linear-gradient';
 
 // Componente de card para exibir rotina criada
-export const CardMenuRotina = ({ 
-    nomeRotina = 'Rotina', 
+export const CardMenuRotina = ({
+    nomeRotina = 'Rotina',
     conclusoes = 0,
     onPress,
     onEdit,
-    onDelete 
+    onDelete
 }) => {
     return (
         <View style={styles.container}>
             <LinearGradient
-                colors={['#1e21809d', '#303169']} 
+                colors={['#1e21809d', '#303169']}
                 style={styles.gradient}
                 start={[0, 0]}
                 end={[1, 1]}
+                pointerEvents="box-none"
             >
                 <View style={styles.button}>
                     <View style={styles.content}>
                         {/* Ícone de editar no topo direito */}
                         <EditarButtonCriar
                             onPress={() => {
-                                console.log('CardMenuRotina: edit icon pressed, nomeRotina=', nomeRotina);
-                                if (onEdit) onEdit();
+                                console.log('CLICOU EDIT');
+                                onEdit?.();
                             }}
-                            style={styles.editIconButton}
+                            style={[
+                                styles.editIconButton,
+                            ]}
                             size={18}
                         />
 
                         {/* Nome da rotina - Grande e em destaque */}
                         <Text style={styles.rotinaNome}>{nomeRotina}</Text>
-                        
+
                         {/* Conclusões */}
                         <View style={styles.conclusaoContainer}>
-                            <Text style={styles.conclusaoLabel}>Concluido: </Text>
+                            <Text style={styles.conclusaoLabel}>Concluído: </Text>
                             <Text style={styles.conclusaoValor}>{conclusoes}x</Text>
                         </View>
                     </View>
@@ -76,7 +79,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 16,
         right: 16,
-        padding: 8,
+        padding: 10,
+        zIndex: 999,
+        elevation: 10, // Android
     },
     rotinaNome: {
         fontSize: 32,

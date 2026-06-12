@@ -60,7 +60,9 @@ export default function Rotina() {
 
       const rotinas =
         Array.isArray(response.data)
-          ? response.data.slice(0, MAX_SLOTS)
+          ? response.data
+              .filter(rotina => Array.isArray(rotina.tarefas) && rotina.tarefas.length > 0)
+              .slice(0, MAX_SLOTS)
           : [];
 
       const filledSlots =
@@ -323,12 +325,14 @@ export default function Rotina() {
 
           onPress={() => { }}
 
-          onEdit={
-            abrirModoEditar(
-              navigation,
-              slot,
-              index
-            )
+          onEdit={() =>
+            navigation.navigate("ConfigurarRotina", {
+              rotinaId: slot?.id,
+              initialData: {
+                ...slot,
+                id: slot?.id,
+              },
+            })
           }
 
           onDelete={() =>

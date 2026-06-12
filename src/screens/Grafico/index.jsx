@@ -5,9 +5,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 export default function Grafico() {
     return (
         <LinearGradient colors={[
-                 '#18354e',
-                 '#335774',
-                 '#9e9ec55d'
+                 '#000000',
+                 '#000000',
+                 '#000014e7'
                 ]}
                  start={[0, 0]}
                   end={[0, 1]}

@@ -21,16 +21,46 @@ export default function Routes() {
             <Stack.Screen 
                 name="ConfigurarRotina" 
                 component={ConfigurarRotina}
+                options={{
+                    title: 'Configuração da Rotina',
+                    headerTransparent: true,
+                    headerTintColor: '#ffffff',
+                    headerTitleStyle: {
+                        color: '#ffffff',
+                    },
+                    headerShadowVisible: false,
+                    headerBackTitleVisible: false,
+                }}
             />
 
             <Stack.Screen 
                 name="ConfigurarTarefa" 
                 component={ConfigurarTarefa}
+                options={{
+                    title: 'Configuração da Rotina',
+                    headerTransparent: true,
+                    headerTintColor: '#ffffff',
+                    headerTitleStyle: {
+                        color: '#ffffff',
+                    },
+                    headerShadowVisible: false,
+                    headerBackTitleVisible: false,
+                }}
             />
 
             <Stack.Screen 
                 name="containerRotina" 
                 component={InserirDadosRotina}
+                options={{
+                    title: 'Configuração da Rotina',
+                    headerTransparent: true,
+                    headerTintColor: '#ffffff',
+                    headerTitleStyle: {
+                        color: '#ffffff',
+                    },
+                    headerShadowVisible: false,
+                    headerBackTitleVisible: false,
+                }}
             />
 
         </Stack.Navigator>

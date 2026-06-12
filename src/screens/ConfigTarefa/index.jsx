@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import InserirDadosRotina from "../../Components/containerConfig/containerRotina";
 
@@ -8,14 +8,16 @@ export default function ConfigurarTarefa({ route }) {
             colors={["#21226D", "#3F41D3"]}
             style={styles.gradient}
         >
-            <ScrollView contentContainerStyle={styles.container}>
+            <View style={styles.container}>
                 <InserirDadosRotina 
                     adicionarTarefa={route?.params?.adicionarTarefa}
                     initialData={route?.params?.initialData}
                     editIndex={route?.params?.editIndex}
+                    isExistingRotina={route?.params?.isExistingRotina}
                     onSaveEdit={route?.params?.onSaveEdit}
+                    onDelete={route?.params?.onDelete}
                 />
-            </ScrollView>
+            </View>
         </LinearGradient>
     );
 }
@@ -25,6 +27,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     container: {
-        padding: 16,
+        flex: 1,
+        padding: 11,
     },
 });

@@ -5,6 +5,7 @@ import {
 } from "react-native";
 
 import { EditarButtonCriar } from "../buttons/EditarButton";
+import { ordenarDias } from "../../utils/diasSemana";
 
 export const AdicionarCard = ({
     nomeTarefa,
@@ -44,41 +45,76 @@ export const AdicionarCard = ({
     };
 
     const formatHorario = (start, end) => {
+
         const formatValue = (value) => {
+
             if (!value) return "";
-            if (typeof value === "string") return value;
-            if (value instanceof Date) return formatTime(value);
-            try {
-                return String(value);
-            } catch (e) {
-                return "";
+
+            // Se já estiver no formato HH:mm ou HH:mm:ss
+            if (typeof value === "string") {
+
+                const match = value.match(/^(\d{2}):(\d{2})/);
+
+                if (match) {
+                    return `${match[1]}:${match[2]}`;
+                }
+
+                const data = new Date(value);
+
+                if (!isNaN(data)) {
+
+                    const hh = String(
+                        data.getHours()
+                    ).padStart(2, "0");
+
+                    const mm = String(
+                        data.getMinutes()
+                    ).padStart(2, "0");
+
+                    return `${hh}:${mm}`;
+                }
+
+                return value;
             }
+
+            if (value instanceof Date) {
+
+                const hh = String(
+                    value.getHours()
+                ).padStart(2, "0");
+
+                const mm = String(
+                    value.getMinutes()
+                ).padStart(2, "0");
+
+                return `${hh}:${mm}`;
+            }
+
+            return "";
         };
 
-        const formattedStart = formatValue(start);
-        const formattedEnd = formatValue(end);
+        const inicio = formatValue(start);
+        const fim = formatValue(end);
 
-        if (formattedStart && formattedEnd) {
-            return `${formattedStart} - ${formattedEnd}`;
+        if (inicio && fim) {
+            return `${inicio} - ${fim}`;
         }
 
-        return formattedStart || formattedEnd;
+        return inicio || fim;
     };
 
     const formatDias = (d) => {
-
         if (!d) return "";
 
         if (Array.isArray(d)) {
 
-            if (d.length === 0)
-                return "";
+            if (d.length === 0) return "";
 
-            if (d.length === 1)
-                return d[0];
+            const ordenado = ordenarDias(d);
 
-            return `${d[0]} - ${d[d.length - 1]
-                }`;
+            if (ordenado.length === 1) return ordenado[0];
+
+            return `${ordenado[0]} - ${ordenado[ordenado.length - 1]}`;
         }
 
         return String(d);
@@ -113,8 +149,11 @@ export const AdicionarCard = ({
                 }`;
         }
 
+
         return capitalize(formatted);
     };
+
+    console.log("onEdit recebido:", onEdit);
 
     return (
 
@@ -131,7 +170,12 @@ export const AdicionarCard = ({
 
                 </View>
 
-                <EditarButtonCriar onPress={onEdit} />
+                <EditarButtonCriar
+                    onPress={() => {
+                        console.log("ONEDIT CHAMADO");
+                        onEdit?.();
+                    }}
+                />
 
             </View>
 
@@ -176,7 +220,7 @@ export const AdicionarCard = ({
 const styles = StyleSheet.create({
 
     card: {
-        backgroundColor: "#ECEBFF",
+        backgroundColor: "#ecebff2f",
         padding: 16,
         borderRadius: 12,
         marginTop: 12,
@@ -195,6 +239,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         width: "100%",
         alignItems: "center",
+        pointerEvents: "none",
     },
 
     row: {
@@ -206,21 +251,26 @@ const styles = StyleSheet.create({
     nome: {
         fontSize: 18,
         fontWeight: "bold",
+        color: "#ffffff",
     },
 
     tipo: {
-        color: "#555",
+        color: "#ffffff",
+        fontWeight: "bold",
     },
 
     horario: {
-        color: "#555",
+        color: "#ffffff",
+        fontWeight: "bold",
     },
 
     diasemana: {
-        color: "#555",
+        color: "#ffffff",
+        fontWeight: "bold",
     },
 
     duracao: {
-        color: "#555",
+        color: "#ffffff",
+        fontWeight: "bold",
     },
 });
